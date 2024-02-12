@@ -101,10 +101,25 @@ class Contact:
             if self.personal_number == work_number:
                 raise ValueError("Рабочий и личный телефоны не должны совпадать!")
                 return False
-            else:
-                return True
         except AttributeError:
-            return True
+            pass
+            
+        if self.__has_number_in_file(work_number):
+            raise ValueError("Контакт с данным номером уже существует в справочнике!")
+            return False
+        
+        return True
+        
+    def __has_number_in_file(self, number: str) -> bool:
+        """
+        Возвращает true, если данный номер уже существует в справочнике, иначе false.
+        """
+        with open("phonebook.txt", "r", encoding="utf-8") as file:
+            for line in file:
+                if line.find(number) != -1:
+                    return True
+            
+            return False
 
     @property
     def personal_number(self) -> str:
@@ -132,10 +147,14 @@ class Contact:
             if self.work_number == personal_number:
                 raise ValueError("Рабочий и личный телефоны не должны совпадать!")
                 return False
-            else:
-                return True
         except AttributeError:
-            return True
+            pass
+        
+        if self.__has_number_in_file(personal_number):
+            raise ValueError("Контакт с данным номером уже существует в справочнике!")
+            return False
+            
+        return True
 
     def save(self):
         """
