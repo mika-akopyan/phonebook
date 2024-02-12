@@ -9,7 +9,7 @@ class Contact:
         patronymic: str = None,
         organization: str = None,
         work_number: str = None,
-        personal_number: str = None
+        personal_number: str = None,
     ) -> None:
         # Установка значений свойствам, если они были переданы в функцию
         if surname is not None:
@@ -90,7 +90,21 @@ class Contact:
                 "Ожидается значение в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
             )
         else:
-            self.__work_number = work_number
+            if self.__is_unique_work_number(work_number):
+                self.__work_number = work_number
+
+    def __is_unique_work_number(self, work_number: str):
+        """
+        Возвращает true, если рабочий номер является уникальным, иначе false.
+        """
+        try:
+            if self.personal_number == work_number:
+                raise ValueError("Рабочий и личный телефоны не должны совпадать!")
+                return False
+            else:
+                return True
+        except AttributeError:
+            return True
 
     @property
     def personal_number(self) -> str:
@@ -107,11 +121,25 @@ class Contact:
                 "Ожидается значение в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
             )
         else:
-            self.__personal_number = personal_number
+            if self.__is_unique_personal_number(personal_number):
+                self.__personal_number = personal_number
 
+    def __is_unique_personal_number(self, personal_number: str):
+        """
+        Возвращает true, если личный номер является уникальным, иначе false.
+        """
+        try:
+            if self.work_number == personal_number:
+                raise ValueError("Рабочий и личный телефоны не должны совпадать!")
+                return False
+            else:
+                return True
+        except AttributeError:
+            return True
+        
     def save(self):
         """
-        Сохраняет контакт в телефонном справочнике
+        Сохраняет контакт в телефонном справочнике.
         """
         with open("phonebook.txt", "a", encoding="utf-8") as file:
             file.write(
