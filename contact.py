@@ -136,12 +136,17 @@ class Contact:
                 return True
         except AttributeError:
             return True
-        
+
     def save(self):
         """
         Сохраняет контакт в телефонном справочнике.
         """
         with open("phonebook.txt", "a", encoding="utf-8") as file:
             file.write(
-                f"{self.surname, self.name, self.patronymic, self.organization, self.work_number, self.personal_number}"
+                self.surname + ", " +
+                self.name + ", " +
+                self.patronymic + ", " +
+                self.organization + ", " +
+                self.work_number + ", " +
+                self.personal_number + "\n"
             )
