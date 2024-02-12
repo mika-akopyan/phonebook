@@ -8,8 +8,8 @@ class Contact:
         name: str = None,
         patronymic: str = None,
         organization: str = None,
-        work_number = None,
-        personal_number = None
+        work_number: str = None,
+        personal_number: str = None
     ) -> None:
         if surname is not None:
             self.surname = surname
@@ -30,7 +30,7 @@ class Contact:
             self.personal_number = personal_number
 
     @property
-    def surname(self):
+    def surname(self) -> str:
         return self.__surname
 
     @surname.setter
@@ -42,7 +42,7 @@ class Contact:
             raise TypeError("Ожидается строковое значение!")
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.__name
 
     @name.setter
@@ -54,7 +54,7 @@ class Contact:
             raise TypeError("Ожидается строковое значение!")
 
     @property
-    def patronymic(self):
+    def patronymic(self) -> str:
         return self.__patronymic
 
     @patronymic.setter
@@ -66,7 +66,7 @@ class Contact:
             raise TypeError("Ожидается строковое значение!")
 
     @property
-    def organization(self):
+    def organization(self) -> str:
         return self.__organization
 
     @organization.setter
@@ -78,7 +78,7 @@ class Contact:
             raise TypeError("Ожидается строковое значение!")
 
     @property
-    def work_number(self):
+    def work_number(self) -> str:
         return self.__work_number
 
     @work_number.setter
@@ -92,7 +92,7 @@ class Contact:
             self.__work_number = work_number
 
     @property
-    def personal_number(self):
+    def personal_number(self) -> str:
         return self.__personal_number
 
     @personal_number.setter
