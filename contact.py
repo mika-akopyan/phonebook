@@ -72,3 +72,7 @@ class Contact:
             raise TypeError('Ожидается значение в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!')
         else:
             self.__personal_number = personal_number
+
+    def save(self):
+        with open('phonebook.txt', 'a', encoding='utf-8') as file:
+            file.write(f'{self.surname, self.name, self.patronymic, self.organization, self.work_number, self.personal_number}')
