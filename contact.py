@@ -1,6 +1,31 @@
 import re
 
 class Contact:
+    def __init__(self,
+                 surname:str = None,
+                 name:str = None,
+                 patronymic:str = None,
+                 organization:str = None,
+                 work_number = None,
+                 personal_number = None) -> None:
+        if surname is not None:
+            self.surname = surname
+
+        if name is not None:
+            self.name = name
+
+        if patronymic is not None:
+            self.patronymic = patronymic
+
+        if organization is not None:
+            self.organization = organization
+
+        if work_number is not None:
+            self.work_number = work_number
+
+        if personal_number is not None:
+            self.personal_number = personal_number
+    
     @property
     def surname(self):
         return self.__surname
