@@ -11,6 +11,7 @@ class Contact:
         work_number: str = None,
         personal_number: str = None
     ) -> None:
+        # Установка значений свойствам, если они были переданы в функцию
         if surname is not None:
             self.surname = surname
 
@@ -109,6 +110,9 @@ class Contact:
             self.__personal_number = personal_number
 
     def save(self):
+        """
+        Сохраняет контакт в телефонном справочнике
+        """
         with open("phonebook.txt", "a", encoding="utf-8") as file:
             file.write(
                 f"{self.surname, self.name, self.patronymic, self.organization, self.work_number, self.personal_number}"
