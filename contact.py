@@ -9,7 +9,7 @@ class Contact:
     def surname(self, surname:str):
         # Проверка корректности типов данных
         if isinstance(surname, str):
-            self.__surname = surname
+            self.__surname = surname.strip()
         else:
             raise TypeError('Ожидается строковое значение!')
 
@@ -21,7 +21,7 @@ class Contact:
     def name(self, name:str):
         # Проверка корректности типов данных
         if isinstance(name, str):
-            self.__name = name
+            self.__name = name.strip()
         else:
             raise TypeError('Ожидается строковое значение!')
 
@@ -33,7 +33,7 @@ class Contact:
     def patronymic(self, patronymic:str):
         # Проверка корректности типов данных
         if isinstance(patronymic, str):
-            self.__patronymic = patronymic
+            self.__patronymic = patronymic.strip()
         else:
             raise TypeError('Ожидается строковое значение!')
     
@@ -45,7 +45,7 @@ class Contact:
     def organization(self, organization:str):
         # Проверка корректности типов данных
         if isinstance(organization, str):
-            self.__organization = organization
+            self.__organization = organization.strip()
         else:
             raise TypeError('Ожидается строковое значение!')
 
