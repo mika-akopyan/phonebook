@@ -3,17 +3,18 @@ import re
 
 
 class Manager:
-    def filter(self, **kwargs) -> list[Contact] | None:
+    def filter(self, search_criteria: dict) -> list[Contact] | None:
         """
         Возвращает список, содержащий объекты типа Contact, которые соответствуют заданным параметрам поиска, либо None, если не найден ни один объект.
         """
-        search_criteria = kwargs
+        # search_criteria = kwargs
         list_objects = []
 
         with open("phonebook.txt", "r", encoding="utf-8") as file:
             for line in file:
                 data = line[:(len(line)-1)].split('; ')
                 contact = Contact(data[0], data[1], data[2], data[3], data[4], data[5])
+                contact._old_version = line
                 if self.__is_satisfies_search(search_criteria, contact):
                     list_objects.append(contact)
 
@@ -31,6 +32,19 @@ class Manager:
                 return False
             
         return True
+    
+    def get(self, search_criteria: dict) -> Contact | None:
+        """
+        Возвращает один объект тип Contact, который соответствует заданным параметрам поиска.
+        """
+        list_objects = self.filter(search_criteria)
+
+        if list_objects is None:
+            return None
+        elif len(list_objects) > 1:
+            raise Exception('По указанным критериям было найдено более одного объекта.')
+        else:
+            return list_objects[0]
 
 
 class Contact:
@@ -155,16 +169,26 @@ class Contact:
         Возвращает True, если данный номер уже существует в справочнике, иначе False.
         """
         with open("phonebook.txt", "r", encoding="utf-8") as file:
-            for line in file:
-                if line.find(number) != -1:
+            if self._old_version is None:
+                for line in file:
+                    if line.find(number) != -1:
+                        if number == self.work_number:
+                            raise ValueError("Контакт с данным рабочим номером уже существует в справочнике!")
+                            return True
+                        elif number == self.personal_number:
+                            raise ValueError("Контакт с данным личным номером уже существует в справочнике!")
+                            return True
+            else:
+                data = file.read().replace(self._old_version, '')
+                if data.find(number) != -1:
                     if number == self.work_number:
-                        raise ValueError("Контакт с данным рабочим номером уже существует в справочнике!")
-                        return True
+                                raise ValueError("Контакт с данным рабочим номером уже существует в справочнике!")
+                                return True
                     elif number == self.personal_number:
                         raise ValueError("Контакт с данным личным номером уже существует в справочнике!")
                         return True
-            
-            return False
+        
+        return False
 
     @property
     def personal_number(self) -> str:
@@ -201,15 +225,24 @@ class Contact:
         elif self.personal_number is None:
             raise AttributeError('Укажите личный номер телефона.')
         elif self.__is_unique_number(self.work_number) and self.__is_unique_number(self.personal_number):
-            with open("phonebook.txt", "a", encoding="utf-8") as file:
-                file.write(
-                    self.surname + "; " +
-                    self.name + "; " +
-                    self.patronymic + "; " +
-                    self.organization + "; " +
-                    self.work_number + "; " +
-                    self.personal_number + "\n"
-                )
+            if self._old_version is None:
+                with open("phonebook.txt", "a", encoding="utf-8") as file:
+                    file.write(
+                        self.surname + "; " +
+                        self.name + "; " +
+                        self.patronymic + "; " +
+                        self.organization + "; " +
+                        self.work_number + "; " +
+                        self.personal_number + "\n"
+                    )
+            else:
+                with open("phonebook.txt", "r", encoding="utf-8") as file:
+                    new_version = '; '.join([str(self.surname), str(self.name), str(self.patronymic), str(self.organization), str(self.work_number),str(self.personal_number)]) + '\n'
+                    data = file.read()
+                    data = data.replace(self._old_version, new_version)
+                
+                with open("phonebook.txt", "w", encoding="utf-8") as file:
+                    file.write(data)
 
     def show_info(self) -> str:
         """
