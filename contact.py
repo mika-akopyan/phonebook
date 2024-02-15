@@ -36,11 +36,13 @@ class Contact:
 
     @surname.setter
     def surname(self, surname: str):
-        # Проверка корректности типов данных
-        if isinstance(surname, str):
-            self.__surname = surname.strip()
+        # Проверка валидности данных
+        if not isinstance(surname, str):
+            raise TypeError("Фамилия должна быть строковым значением, может содержать прописные и строчные буквы русского алфавита, дефис и апостроф.")
+        elif re.fullmatch("[А-Яа-я'-]+", surname) is None:
+            raise ValueError("Фамилия должна быть строковым значением, может содержать прописные и строчные буквы русского алфавита, дефис и апостроф.")
         else:
-            raise TypeError("Ожидается строковое значение!")
+            self.__surname = surname
 
     @property
     def name(self) -> str:
@@ -48,11 +50,13 @@ class Contact:
 
     @name.setter
     def name(self, name: str):
-        # Проверка корректности типов данных
-        if isinstance(name, str):
-            self.__name = name.strip()
+        # Проверка валидности данных
+        if not isinstance(name, str):
+            raise TypeError("Имя должно быть строковым значением, может содержать прописные и строчные буквы русского алфавита, дефис и апостроф.")
+        elif re.fullmatch("[А-Яа-я'-]+", name) is None:
+            raise ValueError("Имя должно быть строковым значением, может содержать прописные и строчные буквы русского алфавита, дефис и апостроф.")
         else:
-            raise TypeError("Ожидается строковое значение!")
+            self.__name = name
 
     @property
     def patronymic(self) -> str:
@@ -60,11 +64,13 @@ class Contact:
 
     @patronymic.setter
     def patronymic(self, patronymic: str):
-        # Проверка корректности типов данных
-        if isinstance(patronymic, str):
-            self.__patronymic = patronymic.strip()
+        # Проверка валидности данных
+        if not isinstance(patronymic, str):
+            raise TypeError("Отчество должно быть строковым значением, может содержать прописные и строчные буквы русского алфавита, дефис и апостроф.")
+        elif re.fullmatch("[А-Яа-я'-]+", patronymic) is None:
+            raise ValueError("Отчество должно быть строковым значением, может содержать прописные и строчные буквы русского алфавита, дефис и апостроф.")
         else:
-            raise TypeError("Ожидается строковое значение!")
+            self.__patronymic = patronymic
 
     @property
     def organization(self) -> str:
@@ -72,11 +78,13 @@ class Contact:
 
     @organization.setter
     def organization(self, organization: str):
-        # Проверка корректности типов данных
-        if isinstance(organization, str):
-            self.__organization = organization.strip()
+        # Проверка валидности данных
+        if not isinstance(organization, str):
+            raise TypeError("Наименование организации должно быть строковым значением, не может содержать символ ';'.")
+        elif re.search(';', organization) is not None:
+            raise ValueError("Наименование организации должно быть строковым значением, не может содержать символ ';'.")
         else:
-            raise TypeError("Ожидается строковое значение!")
+            self.__organization = organization.strip()
 
     @property
     def work_number(self) -> str:
@@ -84,13 +92,16 @@ class Contact:
 
     @work_number.setter
     def work_number(self, work_number: str):
-        # Проверка корректности типов данных
-        if re.fullmatch("8-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}", work_number) is None:
+        # Проверка валидности данных
+        if not isinstance(work_number, str):
             raise TypeError(
-                "Ожидается значение в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
+                "Рабочий номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
             )
-        else:
-            if self.__is_unique_work_number(work_number):
+        elif re.fullmatch("8-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}", work_number) is None:
+            raise ValueError(
+                "Рабочий номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
+            )
+        elif self.__is_unique_work_number(work_number):
                 self.__work_number = work_number
 
     def __is_unique_work_number(self, work_number: str):
@@ -127,16 +138,16 @@ class Contact:
 
     @personal_number.setter
     def personal_number(self, personal_number: str):
-        # Проверка корректности типов данных
-        if (
-            re.fullmatch("8-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}", personal_number)
-            is None
-        ):
+        # Проверка валидности данных
+        if not isinstance(personal_number, str):
             raise TypeError(
-                "Ожидается значение в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
+                "Личный номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
             )
-        else:
-            if self.__is_unique_personal_number(personal_number):
+        elif re.fullmatch("8-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}", personal_number) is None:
+            raise ValueError(
+                "Личный номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
+            )
+        elif self.__is_unique_personal_number(personal_number):
                 self.__personal_number = personal_number
 
     def __is_unique_personal_number(self, personal_number: str):
