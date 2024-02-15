@@ -1,7 +1,41 @@
+from __future__ import annotations
 import re
 
 
+class Manager:
+    def filter(self, **kwargs) -> list[Contact] | None:
+        """
+        Возвращает список, содержащий объекты типа Contact, которые соответствуют заданным параметрам поиска, либо None, если не найден ни один объект.
+        """
+        search_criteria = kwargs
+        list_objects = []
+
+        with open("phonebook.txt", "r", encoding="utf-8") as file:
+            for line in file:
+                data = line[:(len(line)-1)].split('; ')
+                contact = Contact(data[0], data[1], data[2], data[3], data[4], data[5])
+                if self.__is_satisfies_search(search_criteria, contact):
+                    list_objects.append(contact)
+
+        if len(list_objects) == 0:
+            return None
+        else:
+            return list_objects
+
+    def __is_satisfies_search(self, search_criteria: dict, contact: Contact) -> bool:
+        """
+        Возвращает True, если все критерии поиска для объекта удовлетворены, иначе False.
+        """
+        for criteria in search_criteria:
+            if not (getattr(contact, criteria) == search_criteria[criteria]):
+                return False
+            
+        return True
+
+
 class Contact:
+    objects = Manager()
+
     def __init__(
         self,
         surname: str = None,
@@ -101,8 +135,10 @@ class Contact:
             raise ValueError(
                 "Рабочий номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
             )
-        elif self.__is_unique_work_number(work_number):
-                self.__work_number = work_number
+        # elif self.__is_unique_work_number(work_number):
+        #         self.__work_number = work_number
+        else:
+            self.__work_number = work_number
 
     def __is_unique_work_number(self, work_number: str):
         """
@@ -147,8 +183,10 @@ class Contact:
             raise ValueError(
                 "Личный номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
             )
-        elif self.__is_unique_personal_number(personal_number):
-                self.__personal_number = personal_number
+        # elif self.__is_unique_personal_number(personal_number):
+        #         self.__personal_number = personal_number
+        else:
+            self.__personal_number = personal_number
 
     def __is_unique_personal_number(self, personal_number: str):
         """
@@ -180,3 +218,14 @@ class Contact:
                 self.work_number + "; " +
                 self.personal_number + "\n"
             )
+
+    def show_info(self) -> str:
+        """
+        Отображает информацию о текущем контакте.
+        """
+        print(
+            '; '.join([str(self.surname), str(self.name), str(self.patronymic), str(self.work_number), str(self.personal_number)])
+        )
+
+    def __getattr__(self, name) -> None:
+        return None
