@@ -180,3 +180,7 @@ class Contact:
                 self.work_number + "; " +
                 self.personal_number + "\n"
             )
+
+
+class Manager:
+    pass
