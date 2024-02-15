@@ -3,11 +3,11 @@ import re
 
 
 class Manager:
-    def filter(self, **kwargs) -> list[Contact] | None:
+    def filter(self, search_criteria: dict) -> list[Contact] | None:
         """
         Возвращает список, содержащий объекты типа Contact, которые соответствуют заданным параметрам поиска, либо None, если не найден ни один объект.
         """
-        search_criteria = kwargs
+        # search_criteria = kwargs
         list_objects = []
 
         with open("phonebook.txt", "r", encoding="utf-8") as file:
@@ -32,6 +32,19 @@ class Manager:
                 return False
             
         return True
+    
+    def get(self, search_criteria: dict) -> Contact | None:
+        """
+        Возвращает один объект тип Contact, который соответствует заданным параметрам поиска.
+        """
+        list_objects = self.filter(search_criteria)
+
+        if list_objects is None:
+            return None
+        elif len(list_objects) > 1:
+            raise Exception('По указанным критериям было найдено более одного объекта.')
+        else:
+            return list_objects[0]
 
 
 class Contact:
