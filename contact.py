@@ -218,3 +218,14 @@ class Contact:
                 self.work_number + "; " +
                 self.personal_number + "\n"
             )
+
+    def show_info(self) -> str:
+        """
+        Отображает информацию о текущем контакте.
+        """
+        print(
+            '; '.join([str(self.surname), str(self.name), str(self.patronymic), str(self.work_number), str(self.personal_number)])
+        )
+
+    def __getattr__(self, name) -> None:
+        return None
