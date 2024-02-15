@@ -135,36 +135,34 @@ class Contact:
             raise ValueError(
                 "Рабочий номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
             )
-        # elif self.__is_unique_work_number(work_number):
-        #         self.__work_number = work_number
         else:
             self.__work_number = work_number
 
-    def __is_unique_work_number(self, work_number: str):
+    def __is_unique_number(self, number: str) -> bool:
         """
-        Возвращает true, если рабочий номер является уникальным, иначе false.
+        Возвращает True, если номер является уникальным, иначе False.
         """
-        try:
-            if self.personal_number == work_number:
-                raise ValueError("Рабочий и личный телефоны не должны совпадать!")
-                return False
-        except AttributeError:
-            pass
-            
-        if self.__has_number_in_file(work_number):
-            raise ValueError("Контакт с данным номером уже существует в справочнике!")
+        if self.work_number == self.personal_number:
+            raise ValueError("Рабочий и личный телефоны не должны совпадать!")
+            return False
+        elif self.__has_number_in_file(number):
             return False
         
         return True
         
     def __has_number_in_file(self, number: str) -> bool:
         """
-        Возвращает true, если данный номер уже существует в справочнике, иначе false.
+        Возвращает True, если данный номер уже существует в справочнике, иначе False.
         """
         with open("phonebook.txt", "r", encoding="utf-8") as file:
             for line in file:
                 if line.find(number) != -1:
-                    return True
+                    if number == self.work_number:
+                        raise ValueError("Контакт с данным рабочим номером уже существует в справочнике!")
+                        return True
+                    elif number == self.personal_number:
+                        raise ValueError("Контакт с данным личным номером уже существует в справочнике!")
+                        return True
             
             return False
 
@@ -183,48 +181,46 @@ class Contact:
             raise ValueError(
                 "Личный номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
             )
-        # elif self.__is_unique_personal_number(personal_number):
-        #         self.__personal_number = personal_number
         else:
             self.__personal_number = personal_number
-
-    def __is_unique_personal_number(self, personal_number: str):
-        """
-        Возвращает true, если личный номер является уникальным, иначе false.
-        """
-        try:
-            if self.work_number == personal_number:
-                raise ValueError("Рабочий и личный телефоны не должны совпадать!")
-                return False
-        except AttributeError:
-            pass
-        
-        if self.__has_number_in_file(personal_number):
-            raise ValueError("Контакт с данным номером уже существует в справочнике!")
-            return False
-            
-        return True
 
     def save(self):
         """
         Сохраняет контакт в телефонном справочнике.
         """
-        with open("phonebook.txt", "a", encoding="utf-8") as file:
-            file.write(
-                self.surname + "; " +
-                self.name + "; " +
-                self.patronymic + "; " +
-                self.organization + "; " +
-                self.work_number + "; " +
-                self.personal_number + "\n"
-            )
+        if self.surname is None:
+            raise AttributeError('Укажите фамилию.')
+        elif self.name is None:
+            raise AttributeError('Укажите имя.')
+        elif self.patronymic is None:
+            raise AttributeError('Укажите отчество.')
+        elif self.organization is None:
+            raise AttributeError('Укажите наименование организации.')
+        elif self.work_number is None:
+            raise AttributeError('Укажите рабочий номер телефона.')
+        elif self.personal_number is None:
+            raise AttributeError('Укажите личный номер телефона.')
+        elif self.__is_unique_number(self.work_number) and self.__is_unique_number(self.personal_number):
+            with open("phonebook.txt", "a", encoding="utf-8") as file:
+                file.write(
+                    self.surname + "; " +
+                    self.name + "; " +
+                    self.patronymic + "; " +
+                    self.organization + "; " +
+                    self.work_number + "; " +
+                    self.personal_number + "\n"
+                )
 
     def show_info(self) -> str:
         """
         Отображает информацию о текущем контакте.
         """
         print(
-            '; '.join([str(self.surname), str(self.name), str(self.patronymic), str(self.work_number), str(self.personal_number)])
+            '; '.join([str(self.surname),
+                       str(self.name),
+                       str(self.patronymic),
+                       str(self.organization),
+                       str(self.work_number),str(self.personal_number)])
         )
 
     def __getattr__(self, name) -> None:
