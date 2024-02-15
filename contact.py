@@ -45,6 +45,14 @@ class Manager:
             raise Exception('По указанным критериям было найдено более одного объекта.')
         else:
             return list_objects[0]
+        
+    def print_all(self):
+        """
+        Построчно выводит на экран все записи из телефонного справочника.
+        """
+        with open("phonebook.txt", "r", encoding="utf-8") as file:
+            for line in file:
+                print(line, end='')
 
 
 class Contact:
