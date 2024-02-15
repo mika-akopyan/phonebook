@@ -173,10 +173,10 @@ class Contact:
         """
         with open("phonebook.txt", "a", encoding="utf-8") as file:
             file.write(
-                self.surname + ", " +
-                self.name + ", " +
-                self.patronymic + ", " +
-                self.organization + ", " +
-                self.work_number + ", " +
+                self.surname + "; " +
+                self.name + "; " +
+                self.patronymic + "; " +
+                self.organization + "; " +
+                self.work_number + "; " +
                 self.personal_number + "\n"
             )
