@@ -30,7 +30,11 @@ class Manager:
         Возвращает True, если все критерии поиска для объекта удовлетворены, иначе False.
         """
         for criteria in search_criteria:
-            if not (getattr(contact, criteria) == search_criteria[criteria]):
+            if getattr(contact, criteria) is not None:
+                if not (getattr(contact, criteria) == search_criteria[criteria]):
+                    return False
+            else:
+                raise AttributeError(f'"Contact" не содержит атрибут {criteria}')
                 return False
             
         return True
