@@ -3,11 +3,13 @@ import re
 
 
 class Manager:
-    def filter(self, search_criteria: dict) -> list[Contact] | None:
+    """
+    Предназначен для управления данными телефонного справочника.
+    """
+    def filter(self, search_criteria: dict[str, str]) -> list[Contact] | None:
         """
         Возвращает список, содержащий объекты типа Contact, которые соответствуют заданным параметрам поиска, либо None, если не найден ни один объект.
         """
-        # search_criteria = kwargs
         list_objects = []
 
         with open("phonebook.txt", "r", encoding="utf-8") as file:
@@ -33,9 +35,9 @@ class Manager:
             
         return True
     
-    def get(self, search_criteria: dict) -> Contact | None:
+    def get(self, search_criteria: dict[str, str]) -> Contact | None:
         """
-        Возвращает один объект тип Contact, который соответствует заданным параметрам поиска.
+        Возвращает один объект типа Contact, который соответствует заданным параметрам поиска.
         """
         list_objects = self.filter(search_criteria)
 
@@ -46,7 +48,7 @@ class Manager:
         else:
             return list_objects[0]
         
-    def print_all(self):
+    def print_all(self) -> str:
         """
         Построчно выводит на экран все записи из телефонного справочника.
         """
@@ -56,6 +58,9 @@ class Manager:
 
 
 class Contact:
+    """
+    Представляет контакт из телефонного справочника.
+    """
     objects = Manager()
 
     def __init__(
@@ -136,9 +141,9 @@ class Contact:
     def organization(self, organization: str):
         # Проверка валидности данных
         if not isinstance(organization, str):
-            raise TypeError("Наименование организации должно быть строковым значением, не может содержать символ ';'.")
+            raise TypeError("Название организации должно быть строковым значением, не может содержать символ ';'.")
         elif re.search(';', organization) is not None:
-            raise ValueError("Наименование организации должно быть строковым значением, не может содержать символ ';'.")
+            raise ValueError("Название организации должно быть строковым значением, не может содержать символ ';'.")
         else:
             self.__organization = organization.strip()
 
@@ -151,11 +156,11 @@ class Contact:
         # Проверка валидности данных
         if not isinstance(work_number, str):
             raise TypeError(
-                "Рабочий номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
+                "Рабочий номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое целое число от 0 до 9!"
             )
         elif re.fullmatch("8-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}", work_number) is None:
             raise ValueError(
-                "Рабочий номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
+                "Рабочий номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое целое число от 0 до 9!"
             )
         else:
             self.__work_number = work_number
@@ -207,11 +212,11 @@ class Contact:
         # Проверка валидности данных
         if not isinstance(personal_number, str):
             raise TypeError(
-                "Личный номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
+                "Личный номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое целое число от 0 до 9!"
             )
         elif re.fullmatch("8-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}", personal_number) is None:
             raise ValueError(
-                "Личный номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое число от 0 до 9!"
+                "Личный номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое целое число от 0 до 9!"
             )
         else:
             self.__personal_number = personal_number
@@ -227,7 +232,7 @@ class Contact:
         elif self.patronymic is None:
             raise AttributeError('Укажите отчество.')
         elif self.organization is None:
-            raise AttributeError('Укажите наименование организации.')
+            raise AttributeError('Укажите название организации.')
         elif self.work_number is None:
             raise AttributeError('Укажите рабочий номер телефона.')
         elif self.personal_number is None:
