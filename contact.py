@@ -8,7 +8,8 @@ class Manager:
     """
     def filter(self, search_criteria: dict[str, str]) -> list[Contact] | None:
         """
-        Возвращает список, содержащий объекты типа Contact, которые соответствуют заданным параметрам поиска, либо None, если не найден ни один объект.
+        Возвращает список, содержащий объекты типа Contact,
+        которые соответствуют заданным параметрам поиска, либо None, если не найден ни один объект.
         """
         list_objects = []
 
@@ -101,11 +102,15 @@ class Contact:
 
     @surname.setter
     def surname(self, surname: str):
+        error_msg = ("Фамилия должна быть строковым значением, "
+                     "может содержать прописные и строчные буквы русского алфавита, "
+                     "дефис и апостроф.")
+        
         # Проверка валидности данных
         if not isinstance(surname, str):
-            raise TypeError("Фамилия должна быть строковым значением, может содержать прописные и строчные буквы русского алфавита, дефис и апостроф.")
+            raise TypeError(error_msg)
         elif re.fullmatch("[А-Яа-я'-]+", surname) is None:
-            raise ValueError("Фамилия должна быть строковым значением, может содержать прописные и строчные буквы русского алфавита, дефис и апостроф.")
+            raise ValueError(error_msg)
         else:
             self.__surname = surname
 
@@ -115,11 +120,15 @@ class Contact:
 
     @name.setter
     def name(self, name: str):
+        error_msg = ("Имя должно быть строковым значением, "
+                     "может содержать прописные и строчные буквы русского алфавита, "
+                     "дефис и апостроф.")
+        
         # Проверка валидности данных
         if not isinstance(name, str):
-            raise TypeError("Имя должно быть строковым значением, может содержать прописные и строчные буквы русского алфавита, дефис и апостроф.")
+            raise TypeError(error_msg)
         elif re.fullmatch("[А-Яа-я'-]+", name) is None:
-            raise ValueError("Имя должно быть строковым значением, может содержать прописные и строчные буквы русского алфавита, дефис и апостроф.")
+            raise ValueError(error_msg)
         else:
             self.__name = name
 
@@ -129,11 +138,15 @@ class Contact:
 
     @patronymic.setter
     def patronymic(self, patronymic: str):
+        error_msg = ("Отчество должно быть строковым значением, "
+                     "может содержать прописные и строчные буквы русского алфавита, "
+                     "дефис и апостроф.")
+                    
         # Проверка валидности данных
         if not isinstance(patronymic, str):
-            raise TypeError("Отчество должно быть строковым значением, может содержать прописные и строчные буквы русского алфавита, дефис и апостроф.")
+            raise TypeError(error_msg)
         elif re.fullmatch("[А-Яа-я'-]+", patronymic) is None:
-            raise ValueError("Отчество должно быть строковым значением, может содержать прописные и строчные буквы русского алфавита, дефис и апостроф.")
+            raise ValueError(error_msg)
         else:
             self.__patronymic = patronymic
 
@@ -143,11 +156,13 @@ class Contact:
 
     @organization.setter
     def organization(self, organization: str):
+        error_msg = "Название организации должно быть строковым значением, не может содержать символ ';'."
+
         # Проверка валидности данных
         if not isinstance(organization, str):
-            raise TypeError("Название организации должно быть строковым значением, не может содержать символ ';'.")
+            raise TypeError(error_msg)
         elif re.search(';', organization) is not None:
-            raise ValueError("Название организации должно быть строковым значением, не может содержать символ ';'.")
+            raise ValueError(error_msg)
         else:
             self.__organization = organization.strip()
 
@@ -157,15 +172,14 @@ class Contact:
 
     @work_number.setter
     def work_number(self, work_number: str):
+        error_msg = ("Рабочий номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, "
+                     "где X - любое целое число от 0 до 9.")
+        
         # Проверка валидности данных
         if not isinstance(work_number, str):
-            raise TypeError(
-                "Рабочий номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое целое число от 0 до 9!"
-            )
+            raise TypeError(error_msg)
         elif re.fullmatch("8-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}", work_number) is None:
-            raise ValueError(
-                "Рабочий номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое целое число от 0 до 9!"
-            )
+            raise ValueError(error_msg)
         else:
             self.__work_number = work_number
 
@@ -213,15 +227,14 @@ class Contact:
 
     @personal_number.setter
     def personal_number(self, personal_number: str):
+        error_msg = ("Личный номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, "
+                     "где X - любое целое число от 0 до 9.")
+        
         # Проверка валидности данных
         if not isinstance(personal_number, str):
-            raise TypeError(
-                "Личный номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое целое число от 0 до 9!"
-            )
+            raise TypeError(error_msg)
         elif re.fullmatch("8-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}", personal_number) is None:
-            raise ValueError(
-                "Личный номер телефона должен быть строковым значением в формате 8-XXX-XXX-XX-XX, где X - любое целое число от 0 до 9!"
-            )
+            raise ValueError(error_msg)
         else:
             self.__personal_number = personal_number
 
@@ -266,7 +279,11 @@ class Contact:
         Обновляет запись в справочнике.
         """
         with open("phonebook.txt", "r", encoding="utf-8") as file:
-            new_version = '; '.join([str(self.surname), str(self.name), str(self.patronymic), str(self.organization), str(self.work_number),str(self.personal_number)]) + '\n'
+            new_version = '; '.join([str(self.surname),
+                                     str(self.name),
+                                     str(self.patronymic),
+                                     str(self.organization),
+                                     str(self.work_number),str(self.personal_number)]) + '\n'
             data = file.read()
             data = data.replace(self._old_version, new_version)
         
