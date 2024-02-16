@@ -239,23 +239,35 @@ class Contact:
             raise AttributeError('Укажите личный номер телефона.')
         elif self.__is_unique_number(self.work_number) and self.__is_unique_number(self.personal_number):
             if self._old_version is None:
-                with open("phonebook.txt", "a", encoding="utf-8") as file:
-                    file.write(
-                        self.surname + "; " +
-                        self.name + "; " +
-                        self.patronymic + "; " +
-                        self.organization + "; " +
-                        self.work_number + "; " +
-                        self.personal_number + "\n"
-                    )
+                self.__insert()
             else:
-                with open("phonebook.txt", "r", encoding="utf-8") as file:
-                    new_version = '; '.join([str(self.surname), str(self.name), str(self.patronymic), str(self.organization), str(self.work_number),str(self.personal_number)]) + '\n'
-                    data = file.read()
-                    data = data.replace(self._old_version, new_version)
-                
-                with open("phonebook.txt", "w", encoding="utf-8") as file:
-                    file.write(data)
+                self.__update()
+
+    def __insert(self):
+        """
+        Вставляет запись в справочник.
+        """
+        with open("phonebook.txt", "a", encoding="utf-8") as file:
+            file.write(
+                self.surname + "; " +
+                self.name + "; " +
+                self.patronymic + "; " +
+                self.organization + "; " +
+                self.work_number + "; " +
+                self.personal_number + "\n"
+            )
+
+    def __update(self):
+        """
+        Обновляет запись в справочнике.
+        """
+        with open("phonebook.txt", "r", encoding="utf-8") as file:
+            new_version = '; '.join([str(self.surname), str(self.name), str(self.patronymic), str(self.organization), str(self.work_number),str(self.personal_number)]) + '\n'
+            data = file.read()
+            data = data.replace(self._old_version, new_version)
+        
+        with open("phonebook.txt", "w", encoding="utf-8") as file:
+            file.write(data)
 
     def show_info(self) -> str:
         """
