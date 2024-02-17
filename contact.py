@@ -62,6 +62,12 @@ class Manager:
             for line in file:
                 print(line, end='')
 
+    def create(self, surname: str, name: str, patronymic: str, organization: str, work_number: str, personal_number: str):
+        """
+        Создает и сохраняет объект.
+        """
+        Contact(surname, name, patronymic, organization, work_number, personal_number).save()
+
 
 class Contact:
     """
