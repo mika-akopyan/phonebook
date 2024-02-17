@@ -6,11 +6,12 @@ class Manager:
     """
     Предназначен для управления данными телефонного справочника.
     """
-    def filter(self, search_criteria: dict[str, str]) -> list[Contact] | None:
+    def filter(self, **kwargs: dict[str, str]) -> list[Contact] | None:
         """
         Возвращает список, содержащий объекты типа Contact,
         которые соответствуют заданным параметрам поиска, либо None, если не найден ни один объект.
         """
+        search_criteria = kwargs
         list_objects = []
 
         with open("phonebook.txt", "r", encoding="utf-8") as file:
@@ -40,11 +41,11 @@ class Manager:
             
         return True
     
-    def get(self, search_criteria: dict[str, str]) -> Contact | None:
+    def get(self, **kwargs: dict[str, str]) -> Contact | None:
         """
         Возвращает один объект типа Contact, который соответствует заданным параметрам поиска.
         """
-        list_objects = self.filter(search_criteria)
+        list_objects = self.filter(**kwargs)
 
         if list_objects is None:
             return None
@@ -290,7 +291,7 @@ class Contact:
         with open("phonebook.txt", "w", encoding="utf-8") as file:
             file.write(data)
 
-    def show_info(self) -> str:
+    def show_info(self) -> None:
         """
         Отображает информацию о текущем контакте.
         """
