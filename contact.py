@@ -53,7 +53,7 @@ class Manager:
         else:
             return list_objects[0]
         
-    def print_all(self) -> str:
+    def print_all(self) -> None:
         """
         Построчно выводит на экран все записи из телефонного справочника.
         """
